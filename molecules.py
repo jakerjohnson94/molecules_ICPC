@@ -4,8 +4,33 @@ Molecules Problem
 """
 # from itertools import permutations
 import itertools
-import sys
-__author__ = "jakerjohnson94 tgentry300 Morgan"
+__author__ = "Jake J, Taylor G, Morgan"
+
+inpt = ['CDBADCBBEFEF',
+        'DACCBADAFEAB',
+        'EFBDCAADBDCD',
+        'ABCDABCDABCD',
+        'DACCBADAFEAB',
+        'EFBDCAADBDCD',
+        'ABCDABCDABCD',
+        'CDBADCBBEFEF',
+        'ABABABABABAB',
+        'CDCDCDCDCDCD',
+        'EEEEEEEEEEEE',
+        'FFFFFFFFFFFF',
+        'ABAAAAAAAABA',
+        'CBCCCCCCCCBC',
+        'DBDDDDDDDDBD',
+        'EBEEEEEEEEBE',
+        'ABBBBBBBBBBA',
+        'ACCCCCCCCCCA',
+        'ADDDDDDDDDDA',
+        'AEEEEEEEEEEA',
+        'BBBABBBABBBB',
+        'CCACCCACCCCC',
+        'DDDDADDADDDD',
+        'EEAEEAEEEEEE',
+        'Q']
 
 
 def parse_input(lines):
@@ -26,9 +51,6 @@ def best_fit(w, h, across1, across2, down1, down2):
         for d1 in range(1, 12 - h):
             if across1[a1] != down1[d1]:
                 continue
-
-            # if it comes past this continue,
-            # we might have a rectangle that works
             for a2 in range(1, 12 - w):
                 if across2[a2] != down1[d1 + h - 1]:
                     continue
@@ -42,48 +64,33 @@ def best_fit(w, h, across1, across2, down1, down2):
     return False
 
 
-def main():
-    inpt = ['CDBADCBBEFEF',
-            'DACCBADAFEAB',
-            'EFBDCAADBDCD',
-            'ABCDABCDABCD',
-            'DACCBADAFEAB',
-            'EFBDCAADBDCD',
-            'ABCDABCDABCD',
-            'CDBADCBBEFEF',
-            'ABABABABABAB',
-            'CDCDCDCDCDCD',
-            'EEEEEEEEEEEE',
-            'FFFFFFFFFFFF',
-            'ABAAAAAAAABA',
-            'CBCCCCCCCCBC',
-            'DBDDDDDDDDBD',
-            'EBEEEEEEEEBE',
-            'ABBBBBBBBBBA',
-            'ACCCCCCCCCCA',
-            'ADDDDDDDDDDA',
-            'AEEEEEEEEEEA',
-            'BBBABBBABBBB',
-            'CCACCCACCCCC',
-            'DDDDADDADDDD',
-            'EEAEEAEEEEEE',
-            'Q']
-    vals = parse_input(inpt)
-    pairs = [(w, h)for w in range(2, 11) for h in range(w, 11)]
-# sort from biggest area to smallest
+def find_possible_rectangles(string_length):
+    height = string_length - 1
+    pairs = [(w, h)for w in range(2, height) for h in range(w, height)]
+    # sort from biggest area to smallest
     pairs.sort(key=lambda x: x[0] * x[1], reverse=True)
-    for grp in vals:
-        perms = itertools.permutations(grp)
-        fits = []
-        for across1, across2, down1, down2 in perms:
-            for w, h in pairs:
-                fit = best_fit(w, h, across1, across2, down1, down2)
-                if fit:
-                    fits.append((w-2)*(h-2))
+    return pairs
 
-        largest_area = sorted(fits, reverse=True)[0] if fits else 0
-        print(largest_area)
+
+def find_largest_area(dataset):
+    pairs = find_possible_rectangles(12)
+    perms = itertools.permutations(dataset)
+    fits = []
+    for across1, across2, down1, down2 in perms:
+        for w, h in pairs:
+            fit = best_fit(w, h, across1, across2, down1, down2)
+            if fit:
+                fits.append((w-2)*(h-2))
+
+    largest_area = sorted(fits, reverse=True)[0] if fits else 0
+    return largest_area
+
+
+def main(inpt):
+    vals = parse_input(inpt)
+    for grp in vals:
+        print(find_largest_area(grp))
 
 
 if __name__ == "__main__":
-    main()
+    main(inpt)
