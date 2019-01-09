@@ -4,7 +4,7 @@ Molecules Problem
 """
 # from itertools import permutations
 import itertools
-__author__ = "Molecule Team: Meaghan Crowell and Jake Johnson"
+__author__ = "jakerjohnson94 tgentry300 Morgan"
 
 
 # def parse_input(inpt):
